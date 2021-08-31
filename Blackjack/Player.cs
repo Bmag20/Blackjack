@@ -1,0 +1,7 @@
+namespace Blackjack
+{
+    class Player
+    {
+        
+    }
+}
