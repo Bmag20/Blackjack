@@ -1,10 +1,15 @@
+using System;
 using System.Collections.Generic;
 
 namespace Blackjack
 {
     class Calculator
     {
-        // Calculate the value of cards in hand
+        private const string PlayerWins = "You beat the dealer!";    
+
+        private const string DealerWins = "Dealer wins!";
+
+        private const string Tied = "You tied with the dealer! Nobody wins!";
         public static void CalculateSumOfCardValues(Player player)
         {
             int sum = 0;
@@ -20,19 +25,15 @@ namespace Blackjack
         {
             string winner;
             if (playerValue > 21)
-            {
-                winner = "dealer";
-            }
+                winner = DealerWins;
             else
             {
                 if (playerValue == 21)
-                    winner = dealerValue == 21 ? "dealer" : "player";
+                    winner = dealerValue == 21 ? Tied : PlayerWins;
                 else if (dealerValue > 21)
-                    winner = "dealer";
-                else if ((21 - playerValue) < (21 - dealerValue))
-                    winner = "player";
+                    winner = DealerWins;
                 else
-                    winner = "dealer";
+                    winner = playerValue > dealerValue ? PlayerWins : DealerWins;
             }
             return winner;
         }

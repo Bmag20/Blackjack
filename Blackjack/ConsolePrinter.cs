@@ -20,10 +20,16 @@ namespace Blackjack
             Console.WriteLine("]");
         }
 
-        public void PrintHandStatus(Player player)
+        public void PrintPlayerHandStatus(Player player)
         {
             Console.WriteLine($"You are currently at {player.Value}");
             PrintCardsInHand(player.CardsInHand);
+        }
+
+        public void PrintDealerHandStatus(Player dealer)
+        {
+            Console.WriteLine($"\nDealer is at {dealer.Value}");
+            PrintCardsInHand(dealer.CardsInHand);
         }
     }
 }
