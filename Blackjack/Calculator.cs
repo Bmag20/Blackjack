@@ -31,7 +31,7 @@ namespace Blackjack
                 if (playerValue == 21)
                     winner = dealerValue == 21 ? Tied : PlayerWins;
                 else if (dealerValue > 21)
-                    winner = DealerWins;
+                    winner = PlayerWins;
                 else
                     winner = playerValue > dealerValue ? PlayerWins : DealerWins;
             }
