@@ -2,7 +2,7 @@ using System;
 
 namespace Blackjack
 {
-    class ConsoleInputHandler : IInputHandler
+    class ConsoleReader : IInputReader
     {
         public int GetHitOrStayInput()
         {

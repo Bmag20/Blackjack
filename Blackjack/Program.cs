@@ -6,8 +6,8 @@ namespace Blackjack
     {
         static void Main(string[] args)
         {
-            IInputHandler inputHandler = new ConsoleInputHandler();
-            IOutputHandler outputHandler = new ConsolePrinter();
+            IInputReader inputHandler = new ConsoleReader();
+            IOutputWriter outputHandler = new ConsolePrinter();
             BlackJackEngine blackJack = new BlackJackEngine(inputHandler, outputHandler);
             blackJack.ConductGame();
         }

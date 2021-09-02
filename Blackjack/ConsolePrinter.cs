@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Blackjack
 {
-    class ConsolePrinter : IOutputHandler
+    class ConsolePrinter : IOutputWriter
     {
         public void PrintText(string text)
         {

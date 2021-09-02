@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Blackjack
 {
-    interface IOutputHandler
+    interface IOutputWriter
     {
         public void PrintText(string text);
         public void PrintCardsInHand(List<Card> cards);

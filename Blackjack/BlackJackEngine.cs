@@ -4,8 +4,8 @@ namespace Blackjack
 {
     class BlackJackEngine
     {
-        private readonly IInputHandler _inputHandler;
-        private readonly IOutputHandler _outputHandler;
+        private readonly IInputReader _inputHandler;
+        private readonly IOutputWriter _outputHandler;
         private Deck _deck;
         private Player _player;
         private Player _dealer;
@@ -13,7 +13,7 @@ namespace Blackjack
         private const int HIT = 1;
         private const int STAY = 0;
 
-        public BlackJackEngine(IInputHandler inputHandler, IOutputHandler outputHandler)
+        public BlackJackEngine(IInputReader inputHandler, IOutputWriter outputHandler)
         {
             _inputHandler = inputHandler;
             _outputHandler = outputHandler;

@@ -1,6 +1,6 @@
 namespace Blackjack
 {
-    interface IInputHandler
+    interface IInputReader
     {
         public int GetHitOrStayInput();
         
