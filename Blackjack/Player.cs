@@ -17,7 +17,7 @@ namespace Blackjack
         public void AddCard(Card card)
         {
             CardsInHand.Add(card);
-            Calculator.CalculateSumOfCardValues(this);
+            Calculator.CalculateValueOfHand(this);
         }
         
         public bool IsBusted()

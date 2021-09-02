@@ -3,40 +3,71 @@ using System.Collections.Generic;
 
 namespace Blackjack
 {
-    class Calculator
+    static class Calculator
     {
-        private const string PlayerWins = "You beat the dealer!";    
+        private const string PlayerWins = "You beat the dealer!";
 
         private const string DealerWins = "Dealer wins!";
 
         private const string Tied = "You tied with the dealer! Nobody wins!";
-        public static void CalculateSumOfCardValues(Player player)
+
+        private static bool _aceInHand;
+
+        public static void CalculateValueOfHand(Player player)
         {
-            int sum = 0;
+            int valueInHand = 0;
+            _aceInHand = false;
             foreach (var card in player.CardsInHand)
             {
-                sum += card.GetCardValue();
+                valueInHand += GetCardValue(card, valueInHand);
             }
-            player.Value = sum;
-            
+
+            player.Value = ReCorrectAceValue(valueInHand);
+        }
+
+        private static int GetCardValue(Card card, int totalValueInHand)
+        {
+            if (card.Rank is > Card.CardRank.Ace and < Card.CardRank.Jack)
+                return (int) card.Rank;
+            else if (card.Rank == Card.CardRank.Ace)
+            {
+                _aceInHand = true;
+                return totalValueInHand + 11 <= 21 ? 11 : 1;
+            }
+            else
+                return 10;
+        }
+
+        private static int ReCorrectAceValue(int totalValueInHand)
+        {
+            if (_aceInHand && totalValueInHand > 21)
+                return totalValueInHand - 10;
+            else
+                return totalValueInHand;
         }
 
         public static string DecideWinner(int playerValue, int dealerValue)
         {
             string winner;
-            if (playerValue > 21)
-                winner = DealerWins;
-            else
+            switch (playerValue)
             {
-                if (playerValue == 21)
+                case > 21:
+                    winner = DealerWins;
+                    break;
+                case 21:
                     winner = dealerValue == 21 ? Tied : PlayerWins;
-                else if (dealerValue > 21)
-                    winner = PlayerWins;
-                else
-                    winner = playerValue > dealerValue ? PlayerWins : DealerWins;
+                    break;
+                default:
+                {
+                    if (dealerValue > 21)
+                        winner = PlayerWins;
+                    else
+                        winner = playerValue > dealerValue ? PlayerWins : DealerWins;
+                    break;
+                }
             }
+
             return winner;
         }
-        
     }
 }
