@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Blackjack
 {
-    class ConsoleOutputHandler : IOutputHandler
+    class ConsolePrinter : IOutputHandler
     {
         public void PrintText(string text)
         {
@@ -18,6 +18,12 @@ namespace Blackjack
                 Console.Write(card);
             }
             Console.WriteLine("]");
+        }
+
+        public void PrintHandStatus(Player player)
+        {
+            Console.WriteLine($"You are currently at {player.Value}");
+            PrintCardsInHand(player.CardsInHand);
         }
     }
 }

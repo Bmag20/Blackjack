@@ -9,7 +9,7 @@ namespace Blackjack
             Console.WriteLine("Hello World!");
 
             IInputHandler inputHandler = new ConsoleInputHandler();
-            IOutputHandler outputHandler = new ConsoleOutputHandler();
+            IOutputHandler outputHandler = new ConsolePrinter();
             BlackJackEngine blackJack = new BlackJackEngine(inputHandler, outputHandler);
             blackJack.ConductGame();
         }

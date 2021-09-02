@@ -24,7 +24,7 @@ namespace Blackjack
             this.Rank = rank;
         }
         
-        // Get value method
+        // Get value method - remove
 
         public int GetCardValue()
         {

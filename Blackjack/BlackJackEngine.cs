@@ -9,7 +9,7 @@ namespace Blackjack
         private Deck _deck;
         private Player _player;
         private Player _dealer;
-        
+
 
         public BlackJackEngine(IInputHandler inputHandler, IOutputHandler outputHandler)
         {
@@ -21,9 +21,10 @@ namespace Blackjack
         public void ConductGame()
         {
             InitialiseGame();
-            int playerValue = ConductPlayerTurn();
-            int dealerValue = ConductDealerTurn();
-            DecideAndAnnounceWinner(playerValue, dealerValue);
+            ConductPlayerTurn();
+            if (!_player.IsBusted())
+                ConductDealerTurn();
+            EndGame();
         }
 
         private void InitialiseGame()
@@ -31,70 +32,53 @@ namespace Blackjack
             _player = new Player();
             _dealer = new Player();
             _deck = new Deck();
+            DrawInitialHand();
+        }
+
+        private void DrawInitialHand()
+        {
             _player.AddCard(_deck.GetRandomCard());
             _player.AddCard(_deck.GetRandomCard());
             _dealer.AddCard(_deck.GetRandomCard());
             _dealer.AddCard(_deck.GetRandomCard());
         }
 
-        private int ConductPlayerTurn()
+
+        private void ConductPlayerTurn()
         {
-            bool keepPlaying = true;
-            int playerValue = Calculator.CalculateSumOfCardValues(_player.CardsInHand);
-            Console.WriteLine($"\n You are currently at {playerValue}");
-            _outputHandler.PrintCardsInHand(_player.CardsInHand);
+            _outputHandler.PrintHandStatus(_player);
+            if (_player.Value >= 21)
+                return;
             _outputHandler.PrintText("\n Hit or stay? (Hit = 1, Stay = 0)");
-            
-            while (_inputHandler.GetHitOrStayInput() != 0 && playerValue <= 21)
+            while (_inputHandler.GetHitOrStayInput() != 0 && !_player.IsBusted())
             {
                 _player.AddCard(_deck.GetRandomCard());
-                playerValue = Calculator.CalculateSumOfCardValues(_player.CardsInHand);
-                _outputHandler.PrintCardsInHand(_player.CardsInHand);
-                Console.WriteLine($"\n You are currently at {playerValue}");
-                _outputHandler.PrintText("\n Hit or stay? (Hit = 1, Stay = 0)");
-
+                _outputHandler.PrintHandStatus(_player);
+                if (!_player.IsBusted())
+                    _outputHandler.PrintText("\n Hit or stay? (Hit = 1, Stay = 0)");
+                else
+                {
+                    _outputHandler.PrintText("You are at Bust!!");
+                    return;
+                }
             }
-            Console.WriteLine($"\n You are currently at {playerValue}");
-            _outputHandler.PrintCardsInHand(_player.CardsInHand);
-            return playerValue;
         }
-        
-        private int ConductDealerTurn()
+
+        private void ConductDealerTurn()
         {
-            int sum = Calculator.CalculateSumOfCardValues(_dealer.CardsInHand);
-            while (sum <= 17)
+            _outputHandler.PrintHandStatus(_dealer);
+
+            while (_dealer.Value <= 17)
             {
                 _dealer.AddCard(_deck.GetRandomCard());
-                sum = Calculator.CalculateSumOfCardValues(_dealer.CardsInHand);
-                _outputHandler.PrintCardsInHand(_dealer.CardsInHand);
-                Console.WriteLine(sum);
+                _outputHandler.PrintHandStatus(_dealer);
             }
-            return sum;
         }
 
-        private void DecideAndAnnounceWinner(int playerValue, int dealerValue)
+        private void EndGame()
         {
-            if (playerValue > 21)
-            {
-                _outputHandler.PrintText("You are currently at Bust!\n");
-                //_outputHandler.PrintCardsInHand(player.CardsInHand);
-                _outputHandler.PrintText("Dealer wins!! \n");
-            }
-            else
-            {
-                if (playerValue == 21)
-                {
-                    _outputHandler.PrintText(dealerValue == 21
-                        ? "You tied with the dealer. No one wins!!"
-                        : "You beat the dealer!");
-                }
-                else if (dealerValue > 21)
-                    _outputHandler.PrintText("You beat the dealer!");
-                else if ((21 - playerValue) < (21 - dealerValue))
-                    _outputHandler.PrintText("You beat the dealer!");
-                else
-                    _outputHandler.PrintText("\n Dealer wins!! \n");
-            }
+            string winner = Calculator.DecideWinner(_player.Value, _dealer.Value);
+            _outputHandler.PrintText($"{winner} wins!!");
         }
     }
 }

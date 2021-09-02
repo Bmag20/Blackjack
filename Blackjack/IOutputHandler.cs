@@ -6,5 +6,7 @@ namespace Blackjack
     {
         public void PrintText(string text);
         public void PrintCardsInHand(List<Card> cards);
+        public void PrintHandStatus(Player player);
+
     }
 }
