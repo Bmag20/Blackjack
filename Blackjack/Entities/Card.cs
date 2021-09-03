@@ -1,6 +1,6 @@
 namespace Blackjack.Entities
 {
-    internal class Card
+    public class Card
     {
         public enum CardSuit
         {

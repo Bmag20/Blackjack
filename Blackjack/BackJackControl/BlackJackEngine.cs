@@ -84,7 +84,7 @@ namespace Blackjack.BackJackControl
 
         private void EndGame()
         {
-            string gameOutcome = Calculator.DecideWinner(_player.Value, _dealer.Value);
+            string gameOutcome = Scorer.DecideWinner(_player.Value, _dealer.Value);
             _outputHandler.PrintText(gameOutcome);
         }
     }

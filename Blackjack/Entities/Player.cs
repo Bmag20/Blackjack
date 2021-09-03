@@ -3,7 +3,7 @@ using Blackjack.BackJackControl;
 
 namespace Blackjack.Entities
 {
-    internal class Player
+    public class Player
     {
         public List<Card> CardsInHand { get; set; }
         public bool Busted { get; set; }
@@ -18,7 +18,7 @@ namespace Blackjack.Entities
         public void AddCard(Card card)
         {
             CardsInHand.Add(card);
-            Calculator.CalculateValueOfHand(this);
+            Scorer.CalculateValueOfHand(this);
         }
         
         public bool IsBusted()
@@ -26,11 +26,5 @@ namespace Blackjack.Entities
             return (Value > 21);
         }
         
-        //compute sum
-
-        // public override string ToString()
-        // {
-        //     return $"with the hand [{CardsInHand}]";
-        // }
     }
 }

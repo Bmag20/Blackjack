@@ -2,14 +2,8 @@ using Blackjack.Entities;
 
 namespace Blackjack.BackJackControl
 {
-    internal static class Calculator
+    public static class Scorer
     {
-        private const string PlayerWins = "You beat the dealer!";
-
-        private const string DealerWins = "Dealer wins!";
-
-        private const string Tied = "You tied with the dealer! Nobody wins!";
-
         private static bool _aceInHand;
 
         public static void CalculateValueOfHand(Player player)
@@ -51,17 +45,17 @@ namespace Blackjack.BackJackControl
             switch (playerValue)
             {
                 case > 21:
-                    winner = DealerWins;
+                    winner = BlackJackConstants.DealerWins;
                     break;
                 case 21:
-                    winner = dealerValue == 21 ? Tied : PlayerWins;
+                    winner = dealerValue == 21 ? BlackJackConstants.Tied : BlackJackConstants.PlayerWins;
                     break;
                 default:
                 {
                     if (dealerValue > 21)
-                        winner = PlayerWins;
+                        winner = BlackJackConstants.PlayerWins;
                     else
-                        winner = playerValue > dealerValue ? PlayerWins : DealerWins;
+                        winner = playerValue > dealerValue ? BlackJackConstants.PlayerWins : BlackJackConstants.DealerWins;
                     break;
                 }
             }
