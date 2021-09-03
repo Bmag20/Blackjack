@@ -1,10 +1,12 @@
 ﻿using System;
+using Blackjack.BackJackControl;
+using Blackjack.InputOutput;
 
 namespace Blackjack
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             IInputReader inputHandler = new ConsoleReader();
             IOutputWriter outputHandler = new ConsolePrinter();

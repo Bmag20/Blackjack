@@ -1,8 +1,9 @@
 using System;
+using Blackjack.BackJackControl;
 
-namespace Blackjack
+namespace Blackjack.InputOutput
 {
-    class ConsoleReader : IInputReader
+    internal class ConsoleReader : IInputReader
     {
         public int GetHitOrStayInput()
         {

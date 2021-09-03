@@ -1,6 +1,6 @@
-namespace Blackjack
+namespace Blackjack.BackJackControl
 {
-    class Validator
+    internal class Validator
     {
         // Validate user input
         public static bool IsHitOrStay(string input)

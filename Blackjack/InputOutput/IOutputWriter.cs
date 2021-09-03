@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Blackjack.Entities;
 
-namespace Blackjack
+namespace Blackjack.InputOutput
 {
-    interface IOutputWriter
+    internal interface IOutputWriter
     {
         public void PrintText(string text);
         public void PrintCardsInHand(List<Card> cards);

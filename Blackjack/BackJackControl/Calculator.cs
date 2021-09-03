@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
+using Blackjack.Entities;
 
-namespace Blackjack
+namespace Blackjack.BackJackControl
 {
-    static class Calculator
+    internal static class Calculator
     {
         private const string PlayerWins = "You beat the dealer!";
 

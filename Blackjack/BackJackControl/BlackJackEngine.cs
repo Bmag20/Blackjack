@@ -1,8 +1,9 @@
-using System;
+using Blackjack.Entities;
+using Blackjack.InputOutput;
 
-namespace Blackjack
+namespace Blackjack.BackJackControl
 {
-    class BlackJackEngine
+    internal class BlackJackEngine
     {
         private readonly IInputReader _inputHandler;
         private readonly IOutputWriter _outputHandler;

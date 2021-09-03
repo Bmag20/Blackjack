@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Blackjack.BackJackControl;
 
-namespace Blackjack
+namespace Blackjack.Entities
 {
-    class Player
+    internal class Player
     {
         public List<Card> CardsInHand { get; set; }
         public bool Busted { get; set; }

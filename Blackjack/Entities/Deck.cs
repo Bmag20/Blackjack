@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Blackjack
+namespace Blackjack.Entities
 {
-    class Deck
+    internal class Deck
     {
         private List<Card> Cards { get; set; }
 

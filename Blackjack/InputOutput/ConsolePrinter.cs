@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Blackjack.Entities;
 
-namespace Blackjack
+namespace Blackjack.InputOutput
 {
-    class ConsolePrinter : IOutputWriter
+    internal class ConsolePrinter : IOutputWriter
     {
         public void PrintText(string text)
         {
