@@ -5,19 +5,18 @@ namespace Blackjack.BackJackControl
 {
     internal class BlackJackEngine
     {
-        private readonly IInputReader _inputHandler;
-        private readonly IOutputWriter _outputHandler;
+        private readonly IInputReader _inputReader;
+        private readonly IOutputWriter _outputWriter;
         private Deck _deck;
-        private Player _player;
-        private Player _dealer;
+        private Hand _player, _dealer;
         
-        private const int HIT = 1;
-        private const int STAY = 0;
+        private const int Hit = 1;
+        private const int Stay = 0;
 
-        public BlackJackEngine(IInputReader inputHandler, IOutputWriter outputHandler)
+        public BlackJackEngine(IInputReader inputReader, IOutputWriter outputWriter)
         {
-            _inputHandler = inputHandler;
-            _outputHandler = outputHandler;
+            _inputReader = inputReader;
+            _outputWriter = outputWriter;
         }
 
         public void ConductGame()
@@ -31,8 +30,8 @@ namespace Blackjack.BackJackControl
 
         private void InitialiseGame()
         {
-            _player = new Player();
-            _dealer = new Player();
+            _player = new Hand();
+            _dealer = new Hand();
             _deck = new Deck();
             DrawInitialHand();
         }
@@ -44,48 +43,49 @@ namespace Blackjack.BackJackControl
             _dealer.AddCard(_deck.GetRandomCard());
             _dealer.AddCard(_deck.GetRandomCard());
         }
-
-
+        
         private void ConductPlayerTurn()
         {
-            _outputHandler.PrintPlayerHandStatus(_player);
-            int hitOrStay = HIT;
-            while (hitOrStay == HIT && _player.Value < 21)
+            _outputWriter.PrintPlayerHandStatus(_player);
+            int hitOrStay = Hit;
+            while (hitOrStay == Hit && _player.Value < 21)
             {
                 hitOrStay = GetPlayerResponse();
-                if (hitOrStay == HIT)
-                    _player.AddCard(_deck.GetRandomCard());
-                _outputHandler.PrintPlayerHandStatus(_player);
+                if (hitOrStay == Hit)
+                    AddCardToHand(_deck.GetRandomCard(), _player);
+                _outputWriter.PrintPlayerHandStatus(_player);
             }
         }
 
         private int GetPlayerResponse()
         {
-            if (_player.Value < 21)
-            {
-                _outputHandler.PrintText("\nHit or stay? (Hit = 1, Stay = 0)");
-                return _inputHandler.GetHitOrStayInput();
-            }
-            return STAY;
+            if (_player.Value >= 21) return Stay;
+            _outputWriter.PrintText("\nHit or stay? (Hit = 1, Stay = 0)");
+            return _inputReader.GetHitOrStayInput();
         }
 
+        private static void AddCardToHand(Card card, Hand hand)
+        {
+            hand.AddCard(card);
+            Scorer.CalculateValueOfHand(hand);
+        }
 
         private void ConductDealerTurn()
         {
-            _outputHandler.PrintText("\n Dealer's Turn");
-            _outputHandler.PrintDealerHandStatus(_dealer);
+            _outputWriter.PrintText("\n Dealer's Turn");
+            _outputWriter.PrintDealerHandStatus(_dealer);
 
             while (_dealer.Value <= 17)
             {
-                _dealer.AddCard(_deck.GetRandomCard());
-                _outputHandler.PrintDealerHandStatus(_dealer);
+                AddCardToHand(_deck.GetRandomCard(), _dealer);
+                _outputWriter.PrintDealerHandStatus(_dealer);
             }
         }
 
         private void EndGame()
         {
             string gameOutcome = Scorer.DecideWinner(_player.Value, _dealer.Value);
-            _outputHandler.PrintText(gameOutcome);
+            _outputWriter.PrintText(gameOutcome);
         }
     }
 }

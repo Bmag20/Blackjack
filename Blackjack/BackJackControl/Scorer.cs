@@ -1,3 +1,4 @@
+using System.Linq;
 using Blackjack.Entities;
 
 namespace Blackjack.BackJackControl
@@ -6,29 +7,25 @@ namespace Blackjack.BackJackControl
     {
         private static bool _aceInHand;
 
-        public static void CalculateValueOfHand(Player player)
+        public static void CalculateValueOfHand(Hand player)
         {
-            int valueInHand = 0;
             _aceInHand = false;
-            foreach (var card in player.CardsInHand)
-            {
-                valueInHand += GetCardValue(card, valueInHand);
-            }
-
+            int valueInHand = player.CardsInHand.Aggregate(0, (current, card) => current + GetCardValue(card, current));
             player.Value = ReCorrectAceValue(valueInHand);
         }
 
         private static int GetCardValue(Card card, int totalValueInHand)
         {
-            if (card.Rank is > Card.CardRank.Ace and < Card.CardRank.Jack)
-                return (int) card.Rank;
-            else if (card.Rank == Card.CardRank.Ace)
+            switch (card.Rank)
             {
-                _aceInHand = true;
-                return totalValueInHand + 11 <= 21 ? 11 : 1;
+                case > Card.CardRank.Ace and < Card.CardRank.Jack:
+                    return (int) card.Rank;
+                case Card.CardRank.Ace:
+                    _aceInHand = true;
+                    return totalValueInHand + 11 <= 21 ? 11 : 1;
+                default:
+                    return 10;
             }
-            else
-                return 10;
         }
 
         private static int ReCorrectAceValue(int totalValueInHand)
@@ -54,12 +51,14 @@ namespace Blackjack.BackJackControl
                 {
                     if (dealerValue > 21)
                         winner = BlackJackConstants.PlayerWins;
+                    else if (dealerValue == playerValue)
+                        winner = BlackJackConstants.Tied;
                     else
                         winner = playerValue > dealerValue ? BlackJackConstants.PlayerWins : BlackJackConstants.DealerWins;
                     break;
                 }
             }
-
+            
             return winner;
         }
     }

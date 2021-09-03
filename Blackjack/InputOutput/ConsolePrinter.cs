@@ -11,7 +11,7 @@ namespace Blackjack.InputOutput
             Console.Write(text);
         }
 
-        public void PrintCardsInHand(List<Card> cards)
+        private static void PrintCardsInHand(List<Card> cards)
         {
             Console.Write("with the hand [");
             foreach (var card in cards)
@@ -21,13 +21,13 @@ namespace Blackjack.InputOutput
             Console.WriteLine("]");
         }
 
-        public void PrintPlayerHandStatus(Player player)
+        public void PrintPlayerHandStatus(Hand player)
         {
             Console.WriteLine($"You are currently at {player.Value}");
             PrintCardsInHand(player.CardsInHand);
         }
 
-        public void PrintDealerHandStatus(Player dealer)
+        public void PrintDealerHandStatus(Hand dealer)
         {
             Console.WriteLine($"\nDealer is at {dealer.Value}");
             PrintCardsInHand(dealer.CardsInHand);
