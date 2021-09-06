@@ -32,6 +32,8 @@ namespace Blackjack.Entities
             Player.AddCard(Deck.GetNextCard());
             Dealer.AddCard(Deck.GetNextCard());
             Dealer.AddCard(Deck.GetNextCard());
+            Scorer.CalculateValueOfHand(Player);
+            Scorer.CalculateValueOfHand(Dealer);
         }
 
         public void AddCardToPlayer(Card card)

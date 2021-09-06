@@ -31,20 +31,21 @@ namespace Blackjack.BackJackControl
 
         private void ConductPlayerTurn()
         {
-            _outputWriter.PrintPlayerHandStatus(_game.Player);
             int hitOrStay = Hit;
             while (hitOrStay == Hit && _game.Player.Value < 21)
             {
+                _outputWriter.PrintPlayerHandStatus(_game.Player);
+
                 hitOrStay = GetPlayerResponse();
                 if (hitOrStay == Hit)
                 {
                     Card newCard = _game.Deck.GetNextCard();
                     _game.AddCardToPlayer(newCard);
-                    _outputWriter.PrintText($"You draw {newCard}");
+                    _outputWriter.PrintText($"You draw {newCard}\n");
                 }
-
-                _outputWriter.PrintPlayerHandStatus(_game.Player);
             }
+            _outputWriter.PrintPlayerHandStatus(_game.Player);
+
         }
 
         private int GetPlayerResponse()
@@ -56,7 +57,7 @@ namespace Blackjack.BackJackControl
 
         private void ConductDealerTurn()
         {
-            _outputWriter.PrintText("\n Dealer's Turn");
+            _outputWriter.PrintText("\nDealer's Turn");
             _outputWriter.PrintDealerHandStatus(_game.Dealer);
             while (_game.Dealer.Value <= 17)
             {
