@@ -21,6 +21,7 @@ namespace Blackjack.Entities
             Seven,
             Eight,
             Nine,
+            Ten,
             Jack,
             Queen,
             King

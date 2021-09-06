@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Blackjack.Entities
 {
-    internal class Deck
+    public class Deck
     {
-        private List<Card> Cards { get; set; }
+        public List<Card> Cards { get; set; }
 
         public Deck()
         {

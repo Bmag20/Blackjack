@@ -3,7 +3,7 @@ using static Blackjack.BackJackControl.BlackJackConstants;
 
 namespace Blackjack.Entities
 {
-    internal class Game
+    public class Game
     {
         public Deck Deck { get; set; }
         public Hand Player { get; set; }
