@@ -63,7 +63,7 @@ namespace Blackjack.BackJackControl
             {
                 Card newCard = _game.Deck.GetNextCard();
                 _game.AddCardToDealer(newCard);
-                _outputWriter.PrintText($"Dealer draws {newCard}");
+                _outputWriter.PrintText($"\nDealer draws {newCard}");
                 _outputWriter.PrintDealerHandStatus(_game.Dealer);
             }
         }

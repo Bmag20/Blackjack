@@ -8,7 +8,7 @@ namespace Blackjack.InputOutput
     {
         public void PrintText(string text)
         {
-            Console.Write(text);
+            Console.WriteLine(text);
         }
 
         private static void PrintCardsInHand(List<Card> cards)
