@@ -40,26 +40,14 @@ namespace Blackjack.BackJackControl
         public static Winner DecideWinner(int playerValue, int dealerValue)
         {
             Winner winner;
-            switch (playerValue)
-            {
-                case > 21:
-                    winner = Winner.Dealer;
-                    break;
-                case 21:
-                    winner = dealerValue == 21 ? Winner.Tie : Winner.Player;
-                    break;
-                default:
-                {
-                    if (dealerValue > 21)
-                        winner = Winner.Player;
-                    else if (dealerValue == playerValue)
-                        winner = Winner.Tie;
-                    else
-                        winner = playerValue > dealerValue ? Winner.Player : Winner.Dealer;
-                    break;
-                }
-            }
-
+            if (playerValue == dealerValue)
+                winner = Winner.Tie;
+            else if (playerValue > 21)
+                winner = Winner.Dealer;
+            else if (dealerValue > 21)
+                winner = Winner.Player;
+            else
+                winner = playerValue > dealerValue ? Winner.Player : Winner.Dealer;
             return winner;
         }
     }
