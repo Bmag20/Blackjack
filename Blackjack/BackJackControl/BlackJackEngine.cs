@@ -32,23 +32,19 @@ namespace Blackjack.BackJackControl
         private void ConductPlayerTurn()
         {
             int hitOrStay = Hit;
-            while (hitOrStay == Hit && _game.PlayerValue < 21)
+            while (hitOrStay == Hit)
             {
                 PrintPlayerHandStatus();
-                hitOrStay = GetPlayerResponse();
+                hitOrStay = _game.PlayerValue < 21 ? GetPlayerResponse() : Stay;
                 if (hitOrStay == Hit)
-                {
-                    Card newCard = _game.Deck.GetNextCard();
-                    _game.AddCardToPlayer(newCard);
-                    _outputWriter.PrintText($"You draw {newCard}\n");
-                }
+                    PlayerHits();
             }
+
             PrintPlayerHandStatus();
         }
 
         private int GetPlayerResponse()
         {
-            if (_game.PlayerValue >= 21) return Stay;
             _outputWriter.PrintText("\nHit or stay? (Hit = 1, Stay = 0)");
             return _inputReader.GetHitOrStayInput();
         }
@@ -59,6 +55,13 @@ namespace Blackjack.BackJackControl
                 ? "You are currently at bust!!"
                 : $"You are currently at {_game.PlayerValue}");
             _outputWriter.PrintCardsInHand(_game.Player);
+        }
+
+        private void PlayerHits()
+        {
+            Card newCard = _game.Deck.GetNextCard();
+            _game.AddCardToPlayer(newCard);
+            _outputWriter.PrintText($"You draw {newCard}\n");
         }
 
         private void ConductDealerTurn()
@@ -73,7 +76,7 @@ namespace Blackjack.BackJackControl
                 PrintDealerHandStatus();
             }
         }
-        
+
         private void PrintDealerHandStatus()
         {
             _outputWriter.PrintText($"Dealer is at {Scorer.CalculateValueOfHand(_game.Dealer)}");
