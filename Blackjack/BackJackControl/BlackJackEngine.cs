@@ -24,7 +24,7 @@ namespace Blackjack.BackJackControl
             _game = new Game();
             _game.DrawInitialHand();
             ConductPlayerTurn();
-            if (!_game.Player.IsBusted())
+            if (_game.PlayerValue < 21)
                 ConductDealerTurn();
             DisplayWinningMessage();
         }
@@ -32,10 +32,9 @@ namespace Blackjack.BackJackControl
         private void ConductPlayerTurn()
         {
             int hitOrStay = Hit;
-            while (hitOrStay == Hit && _game.Player.Value < 21)
+            while (hitOrStay == Hit && _game.PlayerValue < 21)
             {
-                _outputWriter.PrintPlayerHandStatus(_game.Player);
-
+                PrintPlayerHandStatus();
                 hitOrStay = GetPlayerResponse();
                 if (hitOrStay == Hit)
                 {
@@ -44,28 +43,41 @@ namespace Blackjack.BackJackControl
                     _outputWriter.PrintText($"You draw {newCard}\n");
                 }
             }
-            _outputWriter.PrintPlayerHandStatus(_game.Player);
-
+            PrintPlayerHandStatus();
         }
 
         private int GetPlayerResponse()
         {
-            if (_game.Player.Value >= 21) return Stay;
+            if (_game.PlayerValue >= 21) return Stay;
             _outputWriter.PrintText("\nHit or stay? (Hit = 1, Stay = 0)");
             return _inputReader.GetHitOrStayInput();
+        }
+
+        private void PrintPlayerHandStatus()
+        {
+            _outputWriter.PrintText(_game.PlayerValue > 21
+                ? "You are currently at bust!!"
+                : $"You are currently at {_game.PlayerValue}");
+            _outputWriter.PrintCardsInHand(_game.Player);
         }
 
         private void ConductDealerTurn()
         {
             _outputWriter.PrintText("\nDealer's Turn");
-            _outputWriter.PrintDealerHandStatus(_game.Dealer);
-            while (_game.Dealer.Value <= 17)
+            PrintDealerHandStatus();
+            while (_game.DealerValue <= 17)
             {
                 Card newCard = _game.Deck.GetNextCard();
                 _game.AddCardToDealer(newCard);
                 _outputWriter.PrintText($"\nDealer draws {newCard}");
-                _outputWriter.PrintDealerHandStatus(_game.Dealer);
+                PrintDealerHandStatus();
             }
+        }
+        
+        private void PrintDealerHandStatus()
+        {
+            _outputWriter.PrintText($"Dealer is at {Scorer.CalculateValueOfHand(_game.Dealer)}");
+            _outputWriter.PrintCardsInHand(_game.Dealer);
         }
 
         private void DisplayWinningMessage()

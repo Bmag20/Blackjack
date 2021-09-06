@@ -11,26 +11,15 @@ namespace Blackjack.InputOutput
             Console.WriteLine(text);
         }
 
-        private static void PrintCardsInHand(List<Card> cards)
+        public void PrintCardsInHand(Hand hand)
         {
             Console.Write("with the hand [");
-            foreach (var card in cards)
+            foreach (var card in hand.CardsInHand)
             {
                 Console.Write(card);
             }
+
             Console.WriteLine("]");
-        }
-
-        public void PrintPlayerHandStatus(Hand player)
-        {
-            Console.WriteLine($"You are currently at {player.Value}");
-            PrintCardsInHand(player.CardsInHand);
-        }
-
-        public void PrintDealerHandStatus(Hand dealer)
-        {
-            Console.WriteLine($"\nDealer is at {dealer.Value}");
-            PrintCardsInHand(dealer.CardsInHand);
         }
     }
 }

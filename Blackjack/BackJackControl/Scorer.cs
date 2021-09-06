@@ -8,11 +8,11 @@ namespace Blackjack.BackJackControl
     {
         private static bool _aceInHand;
 
-        public static void CalculateValueOfHand(Hand player)
+        public static int CalculateValueOfHand(Hand hand)
         {
             _aceInHand = false;
-            int valueInHand = player.CardsInHand.Aggregate(0, (current, card) => current + GetCardValue(card, current));
-            player.Value = ReCorrectAceValue(valueInHand);
+            int valueInHand = hand.CardsInHand.Aggregate(0, (current, card) => current + GetCardValue(card, current));
+            return ReCorrectAceValue(valueInHand);
         }
 
         private static int GetCardValue(Card card, int totalValueInHand)

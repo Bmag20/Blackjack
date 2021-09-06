@@ -8,12 +8,33 @@ namespace Blackjack.Entities
         public Deck Deck { get; set; }
         public Hand Player { get; set; }
         public Hand Dealer { get; set; }
-        private Winner _winner;
-        public Winner Winner 
+        private int _playerValue;
+        private int _dealerValue;
+
+        public int PlayerValue
         {
-            get 
+            get
             {
-                _winner = Scorer.DecideWinner(Player.Value, Dealer.Value);
+                _playerValue = Scorer.CalculateValueOfHand(Player);
+                return _playerValue;
+            }
+        }
+        public int DealerValue
+        {
+            get
+            {
+                _dealerValue = Scorer.CalculateValueOfHand(Dealer);
+                return _dealerValue;
+            }
+        }
+        
+        private Winner _winner;
+
+        public Winner Winner
+        {
+            get
+            {
+                _winner = Scorer.DecideWinner(PlayerValue, DealerValue);
                 return _winner;
             }
         }
@@ -28,29 +49,22 @@ namespace Blackjack.Entities
 
         public void DrawInitialHand()
         {
-            Player.AddCard(Deck.GetNextCard());
-            Player.AddCard(Deck.GetNextCard());
-            Dealer.AddCard(Deck.GetNextCard());
-            Dealer.AddCard(Deck.GetNextCard());
+            Player.CardsInHand.Add(Deck.GetNextCard());
+            Player.CardsInHand.Add(Deck.GetNextCard());
+            Dealer.CardsInHand.Add(Deck.GetNextCard());
+            Dealer.CardsInHand.Add(Deck.GetNextCard());
             Scorer.CalculateValueOfHand(Player);
             Scorer.CalculateValueOfHand(Dealer);
         }
 
         public void AddCardToPlayer(Card card)
         {
-            Player.AddCard(card);
-            Scorer.CalculateValueOfHand(Player);
+            Player.CardsInHand.Add(card);
         }
 
         public void AddCardToDealer(Card card)
         {
-            Dealer.AddCard(card);
-            Scorer.CalculateValueOfHand(Dealer);
-        }
-
-        public void FinaliseWinner()
-        {
-            Scorer.DecideWinner(Player.Value, Dealer.Value);
+            Dealer.CardsInHand.Add(card);
         }
     }
 }
