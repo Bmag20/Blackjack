@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Blackjack.Entities
 {
@@ -11,8 +12,7 @@ namespace Blackjack.Entities
         {
             this.Cards = CreateNewDeck();
         }
-        
-        // Create a deck
+
         private List<Card> CreateNewDeck()
         {
             List<Card> cards = new List<Card>();
@@ -23,20 +23,20 @@ namespace Blackjack.Entities
                     cards.Add(new Card(rank, suit));
                 }
             }
+
             return cards;
         }
-        
-        // Shuffle deck??
 
-        // Get random card from the deck
-        public Card GetRandomCard()
+        public void ShuffleDeck()
         {
-            Random random = new Random();
-            int randomNumber = random.Next(this.Cards.Count);
-            Card randomCard = Cards[randomNumber];
-            this.Cards.RemoveAt(randomNumber);
-            return randomCard;
+            Cards = Cards.OrderBy(c => new Random().Next()).ToList();
         }
-        
+
+        public Card GetNextCard()
+        {
+            Card nextCard = Cards[0];
+            this.Cards.RemoveAt(0);
+            return nextCard;
+        }
     }
 }

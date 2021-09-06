@@ -1,5 +1,6 @@
 using System.Linq;
 using Blackjack.Entities;
+using static Blackjack.BackJackControl.BlackJackConstants;
 
 namespace Blackjack.BackJackControl
 {
@@ -36,29 +37,29 @@ namespace Blackjack.BackJackControl
                 return totalValueInHand;
         }
 
-        public static string DecideWinner(int playerValue, int dealerValue)
+        public static Winner DecideWinner(int playerValue, int dealerValue)
         {
-            string winner;
+            Winner winner;
             switch (playerValue)
             {
                 case > 21:
-                    winner = BlackJackConstants.DealerWins;
+                    winner = Winner.Dealer;
                     break;
                 case 21:
-                    winner = dealerValue == 21 ? BlackJackConstants.Tied : BlackJackConstants.PlayerWins;
+                    winner = dealerValue == 21 ? Winner.Tie : Winner.Player;
                     break;
                 default:
                 {
                     if (dealerValue > 21)
-                        winner = BlackJackConstants.PlayerWins;
+                        winner = Winner.Player;
                     else if (dealerValue == playerValue)
-                        winner = BlackJackConstants.Tied;
+                        winner = Winner.Tie;
                     else
-                        winner = playerValue > dealerValue ? BlackJackConstants.PlayerWins : BlackJackConstants.DealerWins;
+                        winner = playerValue > dealerValue ? Winner.Player : Winner.Dealer;
                     break;
                 }
             }
-            
+
             return winner;
         }
     }

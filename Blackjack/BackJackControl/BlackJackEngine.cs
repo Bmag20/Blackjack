@@ -1,3 +1,4 @@
+using System;
 using Blackjack.Entities;
 using Blackjack.InputOutput;
 
@@ -7,9 +8,8 @@ namespace Blackjack.BackJackControl
     {
         private readonly IInputReader _inputReader;
         private readonly IOutputWriter _outputWriter;
-        private Deck _deck;
-        private Hand _player, _dealer;
-        
+        private Game _game;
+
         private const int Hit = 1;
         private const int Stay = 0;
 
@@ -21,71 +21,68 @@ namespace Blackjack.BackJackControl
 
         public void ConductGame()
         {
-            InitialiseGame();
+            _game = new Game();
+            _game.DrawInitialHand();
             ConductPlayerTurn();
-            if (!_player.IsBusted())
+            if (!_game.Player.IsBusted())
                 ConductDealerTurn();
-            EndGame();
+            DisplayWinningMessage();
         }
 
-        private void InitialiseGame()
-        {
-            _player = new Hand();
-            _dealer = new Hand();
-            _deck = new Deck();
-            DrawInitialHand();
-        }
-
-        private void DrawInitialHand()
-        {
-            _player.AddCard(_deck.GetRandomCard());
-            _player.AddCard(_deck.GetRandomCard());
-            _dealer.AddCard(_deck.GetRandomCard());
-            _dealer.AddCard(_deck.GetRandomCard());
-        }
-        
         private void ConductPlayerTurn()
         {
-            _outputWriter.PrintPlayerHandStatus(_player);
+            _outputWriter.PrintPlayerHandStatus(_game.Player);
             int hitOrStay = Hit;
-            while (hitOrStay == Hit && _player.Value < 21)
+            while (hitOrStay == Hit && _game.Player.Value < 21)
             {
                 hitOrStay = GetPlayerResponse();
                 if (hitOrStay == Hit)
-                    AddCardToHand(_deck.GetRandomCard(), _player);
-                _outputWriter.PrintPlayerHandStatus(_player);
+                {
+                    Card newCard = _game.Deck.GetNextCard();
+                    _game.AddCardToPlayer(newCard);
+                    _outputWriter.PrintText($"You draw {newCard}");
+                }
+
+                _outputWriter.PrintPlayerHandStatus(_game.Player);
             }
         }
 
         private int GetPlayerResponse()
         {
-            if (_player.Value >= 21) return Stay;
+            if (_game.Player.Value >= 21) return Stay;
             _outputWriter.PrintText("\nHit or stay? (Hit = 1, Stay = 0)");
             return _inputReader.GetHitOrStayInput();
-        }
-
-        private static void AddCardToHand(Card card, Hand hand)
-        {
-            hand.AddCard(card);
-            Scorer.CalculateValueOfHand(hand);
         }
 
         private void ConductDealerTurn()
         {
             _outputWriter.PrintText("\n Dealer's Turn");
-            _outputWriter.PrintDealerHandStatus(_dealer);
-
-            while (_dealer.Value <= 17)
+            _outputWriter.PrintDealerHandStatus(_game.Dealer);
+            while (_game.Dealer.Value <= 17)
             {
-                AddCardToHand(_deck.GetRandomCard(), _dealer);
-                _outputWriter.PrintDealerHandStatus(_dealer);
+                Card newCard = _game.Deck.GetNextCard();
+                _game.AddCardToDealer(newCard);
+                _outputWriter.PrintText($"Dealer draws {newCard}");
+                _outputWriter.PrintDealerHandStatus(_game.Dealer);
             }
         }
 
-        private void EndGame()
+        private void DisplayWinningMessage()
         {
-            string gameOutcome = Scorer.DecideWinner(_player.Value, _dealer.Value);
-            _outputWriter.PrintText(gameOutcome);
+            switch (_game.Winner)
+            {
+                case BlackJackConstants.Winner.Player:
+                    _outputWriter.PrintText(BlackJackConstants.PlayerWins);
+                    break;
+                case BlackJackConstants.Winner.Dealer:
+                    _outputWriter.PrintText(BlackJackConstants.DealerWins);
+                    break;
+                case BlackJackConstants.Winner.Tie:
+                    _outputWriter.PrintText(BlackJackConstants.Tied);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
